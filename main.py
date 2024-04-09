@@ -1,7 +1,6 @@
 import tkinter as tk
 
 
-# Пользовательские функции для математических операций
 def add(x, y):
     return x + y
 
@@ -88,10 +87,9 @@ class CalculatorApp:
             self.master.grid_columnconfigure(i - 2, weight=1)
 
     def update_display(self, value):
-        # Определение размера шрифта
-        font_size = 24  # Базовый размер шрифта
+        font_size = 24
         if len(value) > 10:
-            font_size = max(24 - (len(value) - 10), 10)  # Уменьшаем шрифт, но не меньше 10
+            font_size = max(24 - (len(value) - 10), 10)
         self.display.config(font=("Segoe UI", font_size))
         self.current_expression.set(value)
 
@@ -113,8 +111,6 @@ class CalculatorApp:
         if value in {'+', '-', '×', '÷', '^', '√', '!', '='}:
             current = self.current_expression.get()
             if current.endswith(('+', '-', '×', '÷', '^')) and value in {'+', '-', '×', '÷', '^'}:
-                # Если последний символ текущего выражения является операцией и
-                # пользователь пытается ввести операцию, заменяем последний символ
                 current = current[:-1] + value
             elif value == '=':
                 self.calculate_expression()
@@ -134,7 +130,6 @@ class CalculatorApp:
         expression = self.current_expression.get()
         operators = {'^': power, '√': sqrtl, '!': factorial, '×': multiply, '÷': divide, '+': add, '-': subtract}
 
-        # Создание списка элементов из выражения
         elements = []
         current_number = ''
         for char in expression:
@@ -148,10 +143,8 @@ class CalculatorApp:
         if current_number:
             elements.append(float(current_number))
 
-        # Выполнение операций согласно приоритетам
-        for op in ['!', '√']:  # Поменял местами, чтобы сначала обрабатывать факториалы
+        for op in ['!', '√']:
             if op == '√':
-                # Для оператора корня обходим элементы в обратном порядке
                 indices = [i for i, x in enumerate(elements) if x == op]
                 for op_index in reversed(indices):
                     result = operators[op](elements[op_index + 1])
@@ -159,19 +152,16 @@ class CalculatorApp:
             elif op == '!':
                 while op in elements:
                     op_index = elements.index(op)
-                    result = operators[op](int(elements[op_index - 1]))  # Преобразование к целому числу
+                    result = operators[op](int(elements[op_index - 1]))
                     elements[op_index - 1:op_index + 1] = [result]
 
-        # Выполнение оставшихся операций
         for op in ['^', '×', '÷', '+', '-']:
             while op in elements:
                 op_index = elements.index(op)
                 result = operators[op](elements[op_index - 1], elements[op_index + 1])
                 elements[op_index - 1:op_index + 2] = [result]
 
-        # Обновление дисплея
         self.update_display(str(sum(elements)))
-
 
 
 def main():

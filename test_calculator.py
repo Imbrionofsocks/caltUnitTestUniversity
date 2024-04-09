@@ -1,5 +1,7 @@
 import unittest
+
 from main import add, subtract, multiply, divide, power, sqrtl, factorial
+
 
 class TestCalculatorFunctions(unittest.TestCase):
     def test_add(self):
@@ -20,7 +22,7 @@ class TestCalculatorFunctions(unittest.TestCase):
     def test_divide(self):
         self.assertEqual(divide(15, 5), 3)
         self.assertEqual(divide(10, 2), 5)
-        self.assertEqual(divide(10, 3), 10/3)
+        self.assertEqual(divide(10, 3), 10 / 3)
         self.assertEqual(divide(0, 5), 0)
         self.assertEqual(divide(5, 0), "Error")
 
@@ -42,6 +44,7 @@ class TestCalculatorFunctions(unittest.TestCase):
         self.assertEqual(factorial(5), 120)
         self.assertEqual(factorial(10), 3628800)
         self.assertEqual(factorial(-5), "Error")
+
 
 if __name__ == '__main__':
     unittest.main()

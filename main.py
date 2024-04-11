@@ -2,42 +2,49 @@ import tkinter as tk
 
 
 def add(x, y):
+    if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
+        return "Error: Значения должны быть числом"
     return x + y
 
-
 def subtract(x, y):
+    if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
+        return "Error: Значения должны быть числом"
     return x - y
 
-
 def multiply(x, y):
+    if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
+        return "Error: Значения должны быть числом"
     return x * y
 
-
 def divide(x, y):
+    if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
+        return "Error: Значения должны быть числом"
     if y == 0:
-        return "Error"
+        return "Error: Деление на 0."
     return x / y
 
-
 def power(x, y):
+    if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
+        return "Error: Значения должны быть числом"
     return x ** y
 
-
 def sqrtl(x):
+    if not isinstance(x, (int, float)):
+        return "Error: Значения должны быть числом"
     if x < 0:
-        return "Error"
+        return "Error: Значения должны быть положительным числом"
     return x ** 0.5
 
-
 def factorial(n):
-    if n == 0:
-        return 1
-    elif n < 0:
-        return "Error"
+    if not isinstance(n, (int, float)):
+        return "Error: Значения должны быть числом"
+    if n < 0:
+        return "Error: Значения должны быть положительным числом"
     result = 1
-    for i in range(1, n + 1):
+    for i in range(1, int(n) + 1):
         result *= i
     return result
+
 
 
 class CalculatorApp:
@@ -143,22 +150,31 @@ class CalculatorApp:
         if current_number:
             elements.append(float(current_number))
 
+        # Обработка унарных операций (факториал, квадратный корень)
         for op in ['!', '√']:
-            if op == '√':
-                indices = [i for i, x in enumerate(elements) if x == op]
-                for op_index in reversed(indices):
+            indices = [i for i, x in enumerate(elements) if x == op]
+            for op_index in reversed(indices):
+                if op == '√':
                     result = operators[op](elements[op_index + 1])
-                    elements[op_index:op_index + 2] = [result]
-            elif op == '!':
-                while op in elements:
-                    op_index = elements.index(op)
+                elif op == '!':
                     result = operators[op](int(elements[op_index - 1]))
+
+                if result == "Error":
+                    self.update_display("Error")
+                    return
+                if op == '√':
+                    elements[op_index:op_index + 2] = [result]
+                elif op == '!':
                     elements[op_index - 1:op_index + 1] = [result]
 
+        # Обработка бинарных операций (возведение в степень, умножение, деление, сложение, вычитание)
         for op in ['^', '×', '÷', '+', '-']:
             while op in elements:
                 op_index = elements.index(op)
                 result = operators[op](elements[op_index - 1], elements[op_index + 1])
+                if result == "Error":
+                    self.update_display("Error")
+                    return
                 elements[op_index - 1:op_index + 2] = [result]
 
         self.update_display(str(sum(elements)))
